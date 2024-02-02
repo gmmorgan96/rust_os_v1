@@ -1,8 +1,8 @@
 arch ?= x86_64
 kernel := build/kernel-$(arch).bin
 iso := build/os-$(arch).iso
-target ?= $(arch)-blog_os
-rust_os := target/$(target)/debug/libblog_os.a
+target ?= $(arch)-rust-os-v1
+rust_os := target/$(target)/debug/librust-os-v1.a
 
 linker_script := src/arch/$(arch)/linker.ld
 grub_cfg := src/arch/$(arch)/grub.cfg
