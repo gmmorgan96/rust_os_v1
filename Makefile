@@ -1,7 +1,7 @@
 arch ?= x86_64
 kernel := build/kernel-$(arch).bin
 iso := build/os-$(arch).iso
-target ?= $(arch)-rust-os-v1
+target ?= $(arch)-blog_os
 rust_os := target/$(target)/debug/libblog_os.a
 
 linker_script := src/arch/$(arch)/linker.ld
