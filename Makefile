@@ -1,13 +1,13 @@
 arch ?= x86_64
 kernel := build/kernel-$(arch).bin
 iso := build/os-$(arch).iso
-target ?= $(arch)-rust-os-v1
-rust_os := target/$(target)/debug/librust-os-v1.a
+target ?= $(arch)-blog_os
+rust_os := target/$(target)/debug/libblog_os.a
 
 linker_script := src/arch/$(arch)/linker.ld
 grub_cfg := src/arch/$(arch)/grub.cfg
-assembly_source_files := $(wildcard src/arch/$(arch)/*.s)
-assembly_object_files := $(patsubst src/arch/$(arch)/%.s, \
+assembly_source_files := $(wildcard src/arch/$(arch)/*.asm)
+assembly_object_files := $(patsubst src/arch/$(arch)/%.asm, \
 	build/arch/$(arch)/%.o, $(assembly_source_files))
 
 .PHONY: all clean run iso kernel
