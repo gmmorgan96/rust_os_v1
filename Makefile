@@ -1,5 +1,5 @@
 arch ?= x86_64
-kernel := build/kernel-/$(arch).bin
+kernel := build/kernel-$(arch).bin
 iso := build/os-$(arch).iso
 
 linker_script := src/arch/$(arch)/linker.ld
