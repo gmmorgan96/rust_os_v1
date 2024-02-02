@@ -5,3 +5,6 @@ authors = ["Griffin Morgan <gmmorgan96@ghostosproject.com>"]
 
 [lib]
 crate-type = ["staticlib"]
+
+[dependencies]
+rlibc = "1.0"
