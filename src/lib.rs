@@ -1,8 +1,10 @@
 #![feature(lang_items)]
 #![no_std]
 
-extern crate rlibc;
 use core::panic::PanicInfo;
+
+extern crate rlibc;
+
 
 #[no_mangle]
 pub extern fn rust_main() {
