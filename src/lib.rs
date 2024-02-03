@@ -1,10 +1,15 @@
 // #![feature(lang_items)]
 #![no_std]
+#![feature(const_fn)]
+#![feature(unique)]
 
 
 extern crate rlibc;
 
 use core::panic::PanicInfo;
+
+#[macro_use]
+mod vga_buffer;
 
 #[no_mangle]
 pub extern fn rust_main() {
@@ -21,8 +26,18 @@ pub extern fn rust_main() {
     // write `Hello World!` to the center of the VGA text buffer
     let buffer_ptr = (0xb8000 + 1988) as *mut _;
     unsafe { *buffer_ptr = hello_colored };
-
+    print_something();
     loop{}
+}
+
+pub fn print_something() {
+    let mut writer = Writer {
+        column_position: 0,
+        color_code: ColorCode::new(Color::LightGreen, Color::Black),
+        buffer: unsafe { Unique::new_unchecked(0xb8000 as *mut _) },
+    };
+
+    writer.write_byte(b'H');
 }
 
 // #[lang = "eh_personality"] extern fn eh_personality() {}
