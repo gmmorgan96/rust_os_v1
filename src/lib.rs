@@ -7,7 +7,7 @@ extern crate rlibc;
 use core::panic::PanicInfo;
 
 #[no_mangle]
-pub extern fn main() {
+pub extern fn rust_main() {
     // ATTENTION: we have a very small stack and no guard page
 
     let hello = b"Hello World!";
