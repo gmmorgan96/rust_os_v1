@@ -1,7 +1,5 @@
 // #![feature(lang_items)]
 #![no_std]
-#![feature(const_fn)]
-#![feature(unique)]
 
 
 extern crate rlibc;

@@ -1,4 +1,4 @@
-use core::ptr::Unique;
+#![feature(prt_internals)]
 
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy)]
@@ -73,10 +73,6 @@ impl Writer {
                 self.column_position += 1;
             }
         }
-    }
-
-    fn buffer(&mut self) -> &mut Buffer {
-        unsafe{ self.buffer.as_mute() }
     }
 
     fn new_line(&mut self) { /* TODO */ }
