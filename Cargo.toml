@@ -3,6 +3,8 @@ name = "rust_os_v1"
 version = "0.1.0"
 authors = ["Griffin Morgan <gmmorgan96@ghostosproject.com>"]
 
+[lib]
+crate-type = ["staticlib"]
 
 [dependencies]
 rlibc = "1.0"
