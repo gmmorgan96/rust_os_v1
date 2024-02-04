@@ -22,7 +22,8 @@ pub enum Color {
     White      = 15,
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[repr(transparent)]
 struct ColorCode(u8);
 
 impl ColorCode {
@@ -31,7 +32,7 @@ impl ColorCode {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(C)]
 struct ScreenChar {
     ascii_character: u8,
@@ -41,6 +42,7 @@ struct ScreenChar {
 const BUFFER_HEIGHT: usize = 25;
 const BUFFER_WIDTH: usize = 80;
 
+#[repr(transparent)]
 struct Buffer {
     chars: [[ScreenChar; BUFFER_WIDTH]; BUFFER_HEIGHT],
 }
@@ -48,11 +50,11 @@ struct Buffer {
 pub struct Writer {
     column_position: usize,
     color_code: ColorCode,
-    buffer: Unique<Buffer>,
+    buffer: &'static mut Buffer,
 }
 
 impl Writer {
-    pub fn write_byte{&mut self, byte: u8}{
+    pub fn write_byte(&mut self, byte: u8){
         match byte {
             b'\n' => self.new_line(),
             byte => {
