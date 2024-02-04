@@ -3,6 +3,9 @@ use core::ptr::Unique;
 use spin::Mutex;
 use volatile::Volatile;
 
+extern crate spin;
+extern crate volatile;
+
 pub static WRITER: Mutex<Writer> = Mutex::new(Writer {
     column_position: 0,
     color_code: ColorCode::new(Color::LightGreen, Color::Black),
