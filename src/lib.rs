@@ -1,12 +1,8 @@
-// #![feature(lang_items)]
 #![no_std]
-
-
-extern crate rlibc;
+#![no_main]
 
 use core::panic::PanicInfo;
 
-#[macro_use]
 mod vga_buffer;
 
 #[no_mangle]

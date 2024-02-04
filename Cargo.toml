@@ -4,11 +4,8 @@ version = "0.1.0"
 authors = ["Griffin Morgan <gmmorgan96@ghostosproject.com>"]
 edition = "2018"
 
-[lib]
-crate-type = ["staticlib"]
-
 [dependencies]
-rlibc = "1.0"
+bootloader = "0.9.8"
 volatile = "0.2.6"
 spin = "0.5.2"
 
