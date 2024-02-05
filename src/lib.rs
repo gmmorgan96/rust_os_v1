@@ -45,5 +45,6 @@ pub fn init() {
 
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
+    println!("{}", info);
     loop {}
 }
