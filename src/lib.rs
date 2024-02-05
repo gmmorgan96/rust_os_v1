@@ -28,7 +28,7 @@ pub extern fn rust_main() {
     // vga_buffer::WRITER.lock().write_str("Hello again").unwrap();
     // write!(vga_buffer::WRITER.lock(), ", some numbers: {} {}", 42, 1.337).unwrap();
     println!("Hello This is a Test{}", "!");
-    init(); // new
+    // init(); // new
 
     // invoke a breakpoint exception
     // x86_64::instructions::interrupts::int3(); // new
