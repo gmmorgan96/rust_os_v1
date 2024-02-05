@@ -4,6 +4,7 @@
 use core::panic::PanicInfo;
 
 mod vga_buffer;
+pub mod interrupts;
 
 #[no_mangle]
 pub extern fn rust_main() {
@@ -25,12 +26,19 @@ pub extern fn rust_main() {
     // vga_buffer::WRITER.lock().write_str("Hello again").unwrap();
     // write!(vga_buffer::WRITER.lock(), ", some numbers: {} {}", 42, 1.337).unwrap();
     println!("Hello This is a Test{}", "!");
+    blog_os::init(); // new
+
+    // invoke a breakpoint exception
+    x86_64::instructions::interrupts::int3(); // new
     loop{}
 }
 
 // #[lang = "eh_personality"] extern fn eh_personality() {}
 // #[lang = "panic_fmt"] #[no_mangle] pub extern fn panic_fmt() -> ! {loop{}}
 
+pub fn init() {
+    interrupts::init_idt();
+}
 
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
