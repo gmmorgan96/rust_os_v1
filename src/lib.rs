@@ -5,7 +5,8 @@
 use core::panic::PanicInfo;
 
 mod vga_buffer;
-pub mod interrupts;
+mod interrupts;
+mod serial;
 
 #[no_mangle]
 pub extern fn rust_main() {
