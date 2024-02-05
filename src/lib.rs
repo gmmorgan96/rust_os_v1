@@ -7,6 +7,10 @@ use core::panic::PanicInfo;
 mod vga_buffer;
 pub mod interrupts;
 
+pub fn init() {
+    interrupts::init_idt();
+}
+
 #[no_mangle]
 pub extern fn rust_main() {
     // ATTENTION: we have a very small stack and no guard page
@@ -27,7 +31,7 @@ pub extern fn rust_main() {
     // vga_buffer::WRITER.lock().write_str("Hello again").unwrap();
     // write!(vga_buffer::WRITER.lock(), ", some numbers: {} {}", 42, 1.337).unwrap();
     println!("Hello This is a Test{}", "!");
-    rust_os_v1::init(); // new
+    init(); // new
 
     // invoke a breakpoint exception
     x86_64::instructions::interrupts::int3(); // new
