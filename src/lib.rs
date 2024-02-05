@@ -7,10 +7,6 @@ use core::panic::PanicInfo;
 mod vga_buffer;
 pub mod interrupts;
 
-pub fn init() {
-    interrupts::init_idt();
-}
-
 #[no_mangle]
 pub extern fn rust_main() {
     // ATTENTION: we have a very small stack and no guard page
