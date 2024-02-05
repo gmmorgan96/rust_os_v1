@@ -31,6 +31,7 @@ pub extern fn rust_main() {
 
     // invoke a breakpoint exception
     x86_64::instructions::interrupts::int3(); // new
+    println!("It did not crash!");
     loop{}
 }
 
