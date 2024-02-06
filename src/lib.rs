@@ -1,50 +1,70 @@
 #![no_std]
-#![no_main]
-#![feature(abi_x86_interrupt)]
+#![cfg_attr(test, no_main)]
+#![feature(custom_test_frameworks)]
+#![test_runner(crate::test_runner)]
+#![reexport_test_harness_main = "test_main"]
 
 use core::panic::PanicInfo;
 
-mod vga_buffer;
-mod interrupts;
-mod serial;
+pub mod serial;
+pub mod vga_buffer;
 
-#[no_mangle]
-pub extern fn rust_main() {
-    // ATTENTION: we have a very small stack and no guard page
-
-    // let hello = b"Hello World!";
-    // let color_byte = 0x1f; // white foreground, blue background
-
-    // let mut hello_colored = [color_byte; 24];
-    // for (i, char_byte) in hello.into_iter().enumerate() {
-    //     hello_colored[i*2] = *char_byte;
-    // }
-
-    // // write `Hello World!` to the center of the VGA text buffer
-    // let buffer_ptr = (0xb8000 + 1988) as *mut _;
-    // unsafe { *buffer_ptr = hello_colored };
-    // vga_buffer::print_something();
-    // use core::fmt::Write;
-    // vga_buffer::WRITER.lock().write_str("Hello again").unwrap();
-    // write!(vga_buffer::WRITER.lock(), ", some numbers: {} {}", 42, 1.337).unwrap();
-    println!("Hello This is a Test{}", "!");
-    // init(); // new
-
-    // invoke a breakpoint exception
-    // x86_64::instructions::interrupts::int3(); // new
-    println!("It did not crash!");
-    loop{}
+pub trait Testable {
+    fn run(&self) -> ();
 }
 
-// #[lang = "eh_personality"] extern fn eh_personality() {}
-// #[lang = "panic_fmt"] #[no_mangle] pub extern fn panic_fmt() -> ! {loop{}}
-
-pub fn init() {
-    interrupts::init_idt();
+impl<T> Testable for T
+where
+    T: Fn(),
+{
+    fn run(&self) {
+        serial_print!("{}...\t", core::any::type_name::<T>());
+        self();
+        serial_println!("[ok]");
+    }
 }
 
-#[panic_handler]
-fn panic(_info: &PanicInfo) -> ! {
-    println!("{}", _info);
+pub fn test_runner(tests: &[&dyn Testable]) {
+    serial_println!("Running {} tests", tests.len());
+    for test in tests {
+        test.run();
+    }
+    exit_qemu(QemuExitCode::Success);
+}
+
+pub fn test_panic_handler(info: &PanicInfo) -> ! {
+    serial_println!("[failed]\n");
+    serial_println!("Error: {}\n", info);
+    exit_qemu(QemuExitCode::Failed);
     loop {}
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[repr(u32)]
+pub enum QemuExitCode {
+    Success = 0x10,
+    Failed = 0x11,
+}
+
+pub fn exit_qemu(exit_code: QemuExitCode) {
+    use x86_64::instructions::port::Port;
+
+    unsafe {
+        let mut port = Port::new(0xf4);
+        port.write(exit_code as u32);
+    }
+}
+
+/// Entry point for `cargo xtest`
+#[cfg(test)]
+#[no_mangle]
+pub extern "C" fn _start() -> ! {
+    test_main();
+    loop {}
+}
+
+#[cfg(test)]
+#[panic_handler]
+fn panic(info: &PanicInfo) -> ! {
+    test_panic_handler(info)
 }
